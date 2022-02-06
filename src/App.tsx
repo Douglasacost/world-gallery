@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ModalProvider } from './context/ModalContext';
+import { CountriesProvider } from './context/CountriesContext';
+import Main from './views/Main';
 import './App.css';
 
-function App() {
+const client = new ApolloClient({
+    uri: 'https://countries.trevorblades.com/',
+    cache: new InMemoryCache()
+});
+
+function App({ isTest }: { isTest: boolean }) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <CountriesProvider>
+        <ModalProvider>
+          <Main isTest={isTest} />
+        </ModalProvider>
+      </CountriesProvider>
+    </ApolloProvider> 
   );
 }
 
